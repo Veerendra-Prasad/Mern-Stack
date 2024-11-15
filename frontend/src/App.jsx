@@ -9,7 +9,7 @@ import NotFound from "./Pages/NotFound";
 import { Routes, Route, Navigate } from "react-router-dom";
 
 function App() {
-  const [isLogged, setIsLogged] = useState(false);
+  const [isLogged, setIsLogged] = useState(true);
   return (
     <div>
       {isLogged ? <Navbar /> : null}
