@@ -9,7 +9,18 @@ import NotFound from "./Pages/NotFound";
 import { Routes, Route, Navigate } from "react-router-dom";
 
 function App() {
-  const [isLogged, setIsLogged] = useState(true);
+  const log = sessionStorage.getItem("logged")
+  const [isLogged, setIsLogged] = useState(log ? true : false);
+
+  function auth(username, password) {
+    if (username === "mern-stack" && password === "mern-stack@123") {
+      sessionStorage.setItem("logged" , "true")
+      setIsLogged(true);
+    } else {
+      window.alert("Invaild Login");
+    }
+  }
+
   return (
     <div>
       {isLogged ? <Navbar /> : null}
@@ -32,10 +43,15 @@ function App() {
           }
         />
         <Route
-          path="/edit"
+          path="/api/edit/:id"
           element={isLogged ? <Editpage /> : <Navigate replace to={"/login"} />}
         />
-        <Route path="/login" element={<Loginpage />} />
+        <Route
+          path="/login"
+          element={
+            isLogged ? <Navigate replace to={"/"} /> : <Loginpage auth={auth} />
+          }
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>

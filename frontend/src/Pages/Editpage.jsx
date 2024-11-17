@@ -1,6 +1,53 @@
-import React from "react";
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 function Editpage() {
+  const params = useParams();
+  const details = JSON.parse(localStorage.getItem(params.id));
+  const [data, setData] = useState({ ...details, img: "" });
+  const [list, setList] = useState([details.course]);
+
+  async function submitChange() {
+    const time = new Date().toLocaleDateString();
+    setData({ ...data, date: time, course: list[0] });
+    if (!(data.designation && data.gender && data.name && data.img)) {
+      return window.alert("Please fill all the details");
+    }
+    try {
+      console.log(data);
+      const result = await axios.put("http://localhost:5000/api/edit", {
+        body: { ...data, date: time, course: list[0] },
+      });
+      const response = result.data;
+      localStorage.setItem(params.id, JSON.stringify(response.data.body));
+      window.alert(response.message);
+    } catch (error) {
+      const response = error.response.data;
+      window.alert(response.message);
+    }
+  }
+
+  function handleChange(e) {
+    const { name, value } = e.target;
+    setData({ ...data, [name]: value });
+  }
+
+  function handleChecked(e) {
+    const { value, checked } = e.target;
+    if (checked) {
+      if (list.length > 0) {
+        alert("Please Choose only one Course");
+        e.target.checked = false;
+      } else {
+        setList([...list, value]);
+      }
+    } else {
+      setList(list.filter((item) => item !== value));
+    }
+  }
+  console.log(list);
+
   return (
     <div className="w-full">
       <div className="bg-teal-600 w-full h-14 flex justify-center items-center text-xl text-white">
@@ -14,6 +61,9 @@ function Editpage() {
               type="text"
               placeholder="Enter Name"
               className="px-1 rounded-md outline-none border-2 border-black"
+              name="name"
+              value={data.name}
+              onChange={handleChange}
             />
           </div>
           <div className="flex items-center">
@@ -22,6 +72,9 @@ function Editpage() {
               type="text"
               placeholder="Enter Email"
               className="px-1 rounded-md outline-none border-2 border-black"
+              name="email"
+              value={data.email}
+              onChange={handleChange}
             />
           </div>
           <div className="flex items-center">
@@ -30,11 +83,20 @@ function Editpage() {
               type="number"
               placeholder="Enter Mobile No"
               className="px-1 rounded-md outline-none border-2 border-black"
+              name="mobile"
+              value={data.mobile}
+              onChange={handleChange}
             />
           </div>
           <div className="flex items-center">
             <h1 className="w-1/3">Designation</h1>
-            <select name="" id="" className="border-2 border-black rounded-md">
+            <select
+              name="designation"
+              value={data.designation}
+              onChange={handleChange}
+              className="border-2 border-black rounded-md"
+            >
+              <option value={null}>--none--</option>
               <option value="HR">HR</option>
               <option value="Manager">Manager</option>
               <option value="sales">sales</option>
@@ -44,11 +106,25 @@ function Editpage() {
             <h1 className="w-1/3">Gender</h1>
             <div className="flex">
               <div className="flex items-center gap-1 mr-3">
-                <input type="radio" name="Male" id="Male" />
+                <input
+                  type="radio"
+                  name="gender"
+                  id="Male"
+                  onChange={handleChange}
+                  checked={data.gender === "Male" ? true : false}
+                  value={"Male"}
+                />
                 <label htmlFor="Male">Male</label>
               </div>
               <div className="flex items-center gap-1">
-                <input type="radio" name="Female" id="Female" />
+                <input
+                  type="radio"
+                  name="gender"
+                  id="Female"
+                  checked={data.gender === "Female" ? true : false}
+                  onChange={handleChange}
+                  value={"Female"}
+                />
                 <label htmlFor="Female">Female</label>
               </div>
             </div>
@@ -57,25 +133,54 @@ function Editpage() {
             <h1 className="w-1/3">Course</h1>
             <div className="flex gap-3">
               <section className="gap-1 flex items-center">
-                <input type="checkbox" name="" id="MCA" />
+                <input
+                  type="checkbox"
+                  name="course"
+                  id="MCA"
+                  checked={list[0] === "MCA" ? true : false}
+                  onChange={handleChecked}
+                  value={"MCA"}
+                />
                 <label htmlFor="MCA">MCA</label>
               </section>
               <section className="gap-1 flex items-center">
-                <input type="checkbox" name="" id="BCA" />
+                <input
+                  type="checkbox"
+                  name="course"
+                  id="BCA"
+                  checked={list[0] === "BCA" ? true : false}
+                  onChange={handleChecked}
+                  value={"BCA"}
+                />
                 <label htmlFor="BCA">BCA</label>
               </section>
               <section className="gap-1 flex items-center">
-                <input type="checkbox" name="" id="BSC" />
+                <input
+                  type="checkbox"
+                  name="course"
+                  id="BSC"
+                  checked={list[0] === "BSC" ? true : false}
+                  onChange={handleChecked}
+                  value={"BSC"}
+                />
                 <label htmlFor="BSC">BSC</label>
               </section>
             </div>
           </div>
           <div className="flex">
             <h1 className="w-1/3">Img Upload</h1>
-            <input type="file" />
+            <input
+              type="file"
+              name="img"
+              value={data.img}
+              onChange={handleChange}
+            />
           </div>
           <div className="w-full flex justify-center items-center">
-            <button className="w-16 h-8 rounded-md text-white bg-teal-400">
+            <button
+              className="w-16 h-8 rounded-md text-white bg-teal-400"
+              onClick={() => submitChange()}
+            >
               Update
             </button>
           </div>

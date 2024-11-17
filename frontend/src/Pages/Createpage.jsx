@@ -1,11 +1,9 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { nanoid } from "nanoid";
-import { email, name } from "../Components/Verfication";
 
 function Createpage() {
-  const [list, setList] = useState([]);
-
-  const [data, setData] = useState({
+  const details = {
     name: "",
     email: "",
     mobile: "",
@@ -14,28 +12,30 @@ function Createpage() {
     course: "",
     img: "",
     date: "",
-  });
+  };
+  const [list, setList] = useState([]);
 
-  function submitChange() {
+  const [data, setData] = useState(details);
+
+  async function submitChange() {
     const key = nanoid();
     const time = new Date().toLocaleDateString();
-    if (
-      data.designation &&
-      data.email &&
-      data.gender &&
-      data.img &&
-      data.mobile &&
-      data.name
-    ) {
-      if (email(data.email) && name(data.name)) {
-        setData({ ...data, date: time, course: list[0] });
-        localStorage.setItem(key, JSON.stringify(data));
-      } else {
-        alert("Please Enter Correct Values");
-      }
-    } else {
-      alert("Please fill all the details");
+    if (!(data.designation && data.gender && data.name && list.length === 1)) {
+      return window.alert("Please fill all the details");
     }
+    try {
+      const result = await axios.post("http://localhost:5000/api/create", {
+        body: { ...data, date: time, course: list[0] },
+      });
+      const response = result.data;
+      localStorage.setItem(key, JSON.stringify(response.data.body));
+      window.alert(response.message);
+    } catch (error) {
+      const response = error.response.data;
+      window.alert(response.message);
+    }
+    setData(details)
+    setList([])
   }
 
   function handleChange(e) {
@@ -120,6 +120,7 @@ function Createpage() {
                   name="gender"
                   id="Male"
                   onChange={handleChange}
+                  checked={data.gender === "Male" ? true : false}
                   value={"Male"}
                 />
                 <label htmlFor="Male">Male</label>
@@ -130,6 +131,7 @@ function Createpage() {
                   name="gender"
                   id="Female"
                   onChange={handleChange}
+                  checked={data.gender === "Female" ? true : false}
                   value={"Female"}
                 />
                 <label htmlFor="Female">Female</label>
@@ -145,6 +147,7 @@ function Createpage() {
                   name="course"
                   id="MCA"
                   onChange={handleChecked}
+                  checked={list[0] === "MCA" ? true : false}
                   value={"MCA"}
                 />
                 <label htmlFor="MCA">MCA</label>
@@ -155,6 +158,7 @@ function Createpage() {
                   name="course"
                   id="BCA"
                   onChange={handleChecked}
+                  checked={list[0] === "BCA" ? true : false}
                   value={"BCA"}
                 />
                 <label htmlFor="BCA">BCA</label>
@@ -165,6 +169,7 @@ function Createpage() {
                   name="course"
                   id="BSC"
                   onChange={handleChecked}
+                  checked={list[0] === "BSC" ? true : false}
                   value={"BSC"}
                 />
                 <label htmlFor="BSC">BSC</label>
