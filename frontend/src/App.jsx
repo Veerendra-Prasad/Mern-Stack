@@ -9,10 +9,11 @@ import NotFound from "./Pages/NotFound";
 import { Routes, Route, Navigate } from "react-router-dom";
 
 function App() {
-  const log = sessionStorage.getItem("logged");                          // using sessionstorage to login the user
+  const log = sessionStorage.getItem("logged"); // using session storage to login the user
   const [isLogged, setIsLogged] = useState(log ? true : false);
 
-  function auth(username, password) {                                    // authenticating the user
+  function auth(username, password) {
+    // authenticating the user
     if (username === "mern-stack" && password === "mern-stack@123") {
       sessionStorage.setItem("logged", "true");
       setIsLogged(true);
@@ -21,8 +22,9 @@ function App() {
     }
   }
 
-  return (                                                                  // Defining all the Routes
-    <div>                                                  
+  return (
+    // Defining all the Routes
+    <div>
       {isLogged ? <Navbar /> : null}
       <Routes>
         <Route

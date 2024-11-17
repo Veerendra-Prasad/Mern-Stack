@@ -16,7 +16,7 @@ function Editpage() {
     if (!(data.designation && data.gender && data.name && data.img)) {
       return window.alert("Please fill all the details");
     }
-    if (verify(data.email)) {
+    if (verify(params.id ,data.email)) {
       return window.alert("The email is already registered in the database");
     }
     try {
