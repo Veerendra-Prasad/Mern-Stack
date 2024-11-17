@@ -1,4 +1,4 @@
-export function verify(key ,subject) {
+export function verify(key ,subject) {     // verify that the email is not repeated again in the database
   const test = Object.entries(localStorage).map((entry) => {
     let test = false
     let details = entry[1];
