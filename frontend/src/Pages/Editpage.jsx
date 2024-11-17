@@ -1,18 +1,23 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { verify } from "../Components/Duplicate";
 
 function Editpage() {
-  const params = useParams();                                               // using params hook to get the key from the URL
+  const params = useParams(); // using params hook to get the key from the URL
   const details = JSON.parse(localStorage.getItem(params.id));
   const [data, setData] = useState({ ...details, img: "" });
   const [list, setList] = useState([details.course]);
 
-  async function submitChange() {                                           // function for server side validation
+  async function submitChange() {
+    // function for server side validation
     const time = new Date().toLocaleDateString();
     setData({ ...data, date: time, course: list[0] });
     if (!(data.designation && data.gender && data.name && data.img)) {
       return window.alert("Please fill all the details");
+    }
+    if (verify(data.email)) {
+      return window.alert("The email is already registered in the database");
     }
     try {
       console.log(data);

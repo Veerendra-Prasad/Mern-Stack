@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { nanoid } from "nanoid";
+import { verify } from "../Components/Duplicate";
 
 function Createpage() {
-
-  const details = {                                   
+  // verify()
+  const details = {
     name: "",
     email: "",
     mobile: "",
@@ -18,11 +19,15 @@ function Createpage() {
 
   const [data, setData] = useState(details);
 
-  async function submitChange() {                                       // function for server side validation
+  async function submitChange() {
+    // function for server side validation
     const key = nanoid();
     const time = new Date().toLocaleDateString();
     if (!(data.designation && data.gender && data.name && list.length === 1)) {
       return window.alert("Please fill all the details");
+    }
+    if (verify(data.email)) {
+      return window.alert("The email is already registered in the database");
     }
     try {
       const result = await axios.post("http://localhost:5000/api/create", {
@@ -31,20 +36,22 @@ function Createpage() {
       const response = result.data;
       localStorage.setItem(key, JSON.stringify(response.data.body));
       window.alert(response.message);
+      setData(details);
+      setList([]);
     } catch (error) {
       const response = error.response.data;
       window.alert(response.message);
     }
-    setData(details)
-    setList([])
   }
 
-  function handleChange(e) {                                            // function for input change
+  function handleChange(e) {
+    // function for input change
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
   }
 
-  function handleChecked(e) {                                           // function for checkbox change
+  function handleChecked(e) {
+    // function for checkbox change
     const { value, checked } = e.target;
     if (checked) {
       if (list.length > 0) {
