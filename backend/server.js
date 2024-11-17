@@ -1,8 +1,7 @@
 import express from "express";
 import cors from "cors";
-import { email, mobile, image } from "./verfication.js";
-
-const app = express();
+import { email, mobile, image } from "./verification.js";                 // All the verification functions are in verification.js 
+const app = express();                                                    // expect for email duplicate
 const PORT = 5000;
 
 app.use(cors());

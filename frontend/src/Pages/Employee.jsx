@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 function Employee({ id, data, deleteitem }) {
-  const details = JSON.parse(data);
+  const details = JSON.parse(data);                      // data from the local storage is parsed here 
   return (
     <div className="w-full grid grid-cols-10 place-items-center py-2 text-sm">
       <div className="overflow-hidden w-full">{id}</div>

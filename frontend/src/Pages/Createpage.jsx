@@ -3,7 +3,8 @@ import axios from "axios";
 import { nanoid } from "nanoid";
 
 function Createpage() {
-  const details = {
+
+  const details = {                                   
     name: "",
     email: "",
     mobile: "",
@@ -17,7 +18,7 @@ function Createpage() {
 
   const [data, setData] = useState(details);
 
-  async function submitChange() {
+  async function submitChange() {                                       // function for server side validation
     const key = nanoid();
     const time = new Date().toLocaleDateString();
     if (!(data.designation && data.gender && data.name && list.length === 1)) {
@@ -38,12 +39,12 @@ function Createpage() {
     setList([])
   }
 
-  function handleChange(e) {
+  function handleChange(e) {                                            // function for input change
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
   }
 
-  function handleChecked(e) {
+  function handleChecked(e) {                                           // function for checkbox change
     const { value, checked } = e.target;
     if (checked) {
       if (list.length > 0) {

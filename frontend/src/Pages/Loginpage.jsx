@@ -1,7 +1,7 @@
 import { React, useState } from "react";
 
 function Loginpage({ auth }) {
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState("");              // using useState hook for username and password
   const [password, setPassword] = useState("");
 
   return (

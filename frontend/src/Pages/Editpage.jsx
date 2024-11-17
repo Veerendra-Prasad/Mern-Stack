@@ -3,12 +3,12 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 
 function Editpage() {
-  const params = useParams();
+  const params = useParams();                                               // using params hook to get the key from the URL
   const details = JSON.parse(localStorage.getItem(params.id));
   const [data, setData] = useState({ ...details, img: "" });
   const [list, setList] = useState([details.course]);
 
-  async function submitChange() {
+  async function submitChange() {                                           // function for server side validation
     const time = new Date().toLocaleDateString();
     setData({ ...data, date: time, course: list[0] });
     if (!(data.designation && data.gender && data.name && data.img)) {
@@ -46,7 +46,6 @@ function Editpage() {
       setList(list.filter((item) => item !== value));
     }
   }
-  console.log(list);
 
   return (
     <div className="w-full">

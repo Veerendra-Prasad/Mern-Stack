@@ -5,7 +5,7 @@ import Employee from "./Employee";
 function Listpage() {
   const [data, setData] = useState(localStorage);
 
-  function deleteitem(id) {
+  function deleteitem(id) {                                         // function to delete items from local storage
     localStorage.removeItem(id);
     window.location.reload();
   }
@@ -45,7 +45,7 @@ function Listpage() {
         <div>Create Date</div>
         <div>Action</div>
       </div>
-      {Object.entries(data).map((entry) => {
+      {Object.entries(data).map((entry) => {                        // iterating on the data from local storage
         return (
           <Employee
             key={entry[0]}
